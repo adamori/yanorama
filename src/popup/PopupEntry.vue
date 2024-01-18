@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import { onMounted, ref, watch } from 'vue'
 import { getFromStorage } from '../contentScript/utils'
 
@@ -12,7 +11,6 @@ onMounted(async () => {
 watch(openInNewTab, (value) => {
   chrome.storage.sync.set({ openInNewTab: value })
 })
-
 </script>
 
 <template>

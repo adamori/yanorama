@@ -20,7 +20,6 @@ onMounted(() => {
       sendResponse({ type: 'panorama', data: 'Panorama response' })
       currentPanoramaUrl.value = request.data
       downloader.fetchDataAboutPanorama(request.data)
-
     }
   })
 })
@@ -33,19 +32,29 @@ function downloadPanorama(zoom: Zoom) {
 
 <template>
   <div class="yanorama_btns">
-    <div style="display: flex; gap:10px;" v-show="!downloader.downloading">
-      <button class="yanorama_btn" v-for="zoom in downloader.imageInfos?.Zooms"
-              :key="zoom.level"
-              @click="downloadPanorama(zoom)"
+    <div
+      v-show="!downloader.downloading"
+      style="display: flex; gap: 10px"
+    >
+      <button
+        v-for="zoom in downloader.imageInfos?.Zooms"
+        :key="zoom.level"
+        class="yanorama_btn"
+        @click="downloadPanorama(zoom)"
       >
         {{ buttonNames[zoom.level] || zoom.level }}
       </button>
     </div>
 
-    <div v-show="downloader.downloading" class="yanorama_progress">
-      <div style="border: 1px rgba(0,0,0,0.1) solid; border-radius: 15px;">
-        <div class="progress-bar" :style="{ width: progressBarWidth + '%' }">
-        </div>
+    <div
+      v-show="downloader.downloading"
+      class="yanorama_progress"
+    >
+      <div style="border: 1px rgba(0, 0, 0, 0.1) solid; border-radius: 15px">
+        <div
+          class="progress-bar"
+          :style="{ width: progressBarWidth + '%' }"
+        />
       </div>
       <span class="progress-text">{{ downloader.progressText }}</span>
 

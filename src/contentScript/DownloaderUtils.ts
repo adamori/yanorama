@@ -16,13 +16,11 @@ function setProgress(value: number, max: number, text: string) {
   downloading.value = !(value === 0 && max === 0 && text === '')
 }
 
-
 async function fetchDataAboutPanorama(url: string) {
   const response = await fetch(url)
   const json = await response.json()
   imageInfos.value = json.data.Data.Images
 }
-
 
 async function fetchImage(url: string) {
   const response = await fetch(url)
@@ -33,16 +31,16 @@ async function fetchImage(url: string) {
 async function downloadAllPieces(imageId: string, zoom: number, hRange: number, vRange: number) {
   const baseUrl = `https://pano.maps.yandex.net/${imageId}/`
   let promises = []
-  let allDownloadedImages: { image: ImageBitmap, x: number, y: number }[] = []
+  let allDownloadedImages: { image: ImageBitmap; x: number; y: number }[] = []
   const batchSize = 40
   const totalPieces = hRange * vRange
 
   for (let x = 0; x < hRange; x++) {
     for (let y = 0; y < vRange; y++) {
-// Add fetch promises to the batch
-      promises.push(fetchImage(`${baseUrl}${zoom}.${x}.${y}`).then(image => ({ image, x, y })))
+      // Add fetch promises to the batch
+      promises.push(fetchImage(`${baseUrl}${zoom}.${x}.${y}`).then((image) => ({ image, x, y })))
 
-// When the batch size is reached or the end is reached, wait for all in the batch to complete
+      // When the batch size is reached or the end is reached, wait for all in the batch to complete
       if (promises.length >= batchSize || (x === hRange - 1 && y === vRange - 1)) {
         const batchResults = await Promise.all(promises)
         allDownloadedImages = allDownloadedImages.concat(batchResults)
@@ -55,12 +53,14 @@ async function downloadAllPieces(imageId: string, zoom: number, hRange: number, 
   return allDownloadedImages
 }
 
-function stitchPanorama(images: {
-  image: ImageBitmap,
-  x: number,
-  y: number
-}[], zoomInfo: Zoom) {
-
+function stitchPanorama(
+  images: {
+    image: ImageBitmap
+    x: number
+    y: number
+  }[],
+  zoomInfo: Zoom,
+) {
   const canvas = document.createElement('canvas')
   canvas.width = zoomInfo.width
   canvas.height = zoomInfo.height
@@ -86,23 +86,26 @@ async function createPanorama(imageInfo: YImageInfo, zoom: Zoom) {
   const panoramaCanvas = stitchPanorama(images, zoom)
   setProgress(0, 0, `Saving panorama`)
 
-  panoramaCanvas.toBlob(async (blob) => {
-    if (!blob) {
-      return
-    }
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    const openInNewTab = await getFromStorage('openInNewTab')
-    if (!openInNewTab) {
-      a.download = `${imageInfo.imageId}_${zoom.level}.jpg`
-    }
-    a.target = '_blank'
-    a.click()
-  }, 'image/jpeg', 0.9)
+  panoramaCanvas.toBlob(
+    async (blob) => {
+      if (!blob) {
+        return
+      }
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      const openInNewTab = await getFromStorage('openInNewTab')
+      if (!openInNewTab) {
+        a.download = `${imageInfo.imageId}_${zoom.level}.jpg`
+      }
+      a.target = '_blank'
+      a.click()
+    },
+    'image/jpeg',
+    0.9,
+  )
   setProgress(0, 0, '')
 }
-
 
 export function useDownloader() {
   return {
