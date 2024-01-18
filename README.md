@@ -1,6 +1,14 @@
 # Yanorama
 
-> Browser extension for Yandex Maps allowing you to download panoramas in a single click.
+Browser extension for Yandex Maps allowing you to download panoramas in a single click.
+
+1. Different sizes
+<img src="https://github.com/markarenin/yanorama/assets/85851465/af0c9cf6-bee1-4f38-9af4-2890a4ed994c" width="50%">
+
+2. Downloading
+<img src="https://github.com/markarenin/yanorama/assets/85851465/a85519a5-8214-497e-be46-a401efd442ba" width="50%">
+
+
 
 
 ## Installing
