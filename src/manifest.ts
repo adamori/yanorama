@@ -1,6 +1,10 @@
 import {defineManifest} from '@crxjs/vite-plugin'
 import packageData from '../package.json'
 
+const yandexTopLevelDomains = ["com", "ru", "by", "kz", "uz", "tr", "fr", "az", "ge", "am", "il", "lv", "lt", "ee", "md", "tm", "tj", "eu"]
+const yandexDomainsMatching = yandexTopLevelDomains.map((domain) => `*://yandex.${domain}/*`)
+// yandexDomainsMatching.push(...yandexTopLevelDomains.map((domain) => `*://*.yandex.${domain}/*`))
+
 export default defineManifest({
   name: packageData.name,
   description: packageData.description,
@@ -22,19 +26,14 @@ export default defineManifest({
   },
   content_scripts: [
     {
-      matches: [
-        "https://yandex.ee/*"
-      ],
+      matches: yandexDomainsMatching,
       js: ['src/contentScript/index.ts'],
       run_at: 'document_start',
     },
   ],
   permissions: ['webRequest', 'tabs', 'activeTab', 'storage'],
   host_permissions: [
-    "https://yandex.ee/*",
-    "https://yandex.com/*",
-    "https://yandex.ru/*",
-    "https://api-maps.yandex.ru/*",
-    "*://*.yandex.ee/*"
+    ...yandexDomainsMatching,
+    'https://api-maps.yandex.ru/services/panoramas/1.x/*',
   ]
 })
