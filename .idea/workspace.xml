@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="567719d9-43f2-40fa-9a64-20ee293deb6a" name="Changes" comment="" />
+    <list default="true" id="567719d9-43f2-40fa-9a64-20ee293deb6a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -17,6 +19,9 @@
         <option value="TypeScript File" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -34,6 +39,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/adamiy/Desktop/projects/yanorama/public/img",
     "node.js.detected.package.eslint": "true",
@@ -65,7 +71,7 @@
       <option name="presentableId" value="Default" />
       <updated>1705550973589</updated>
       <workItem from="1705550974766" duration="4631000" />
-      <workItem from="1705580388732" duration="10219000" />
+      <workItem from="1705580388732" duration="10260000" />
     </task>
     <servers />
   </component>
