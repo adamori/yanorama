@@ -20,12 +20,6 @@ jobs:
     - name: Build Chrome Extension
       run: npm run build
 
-    - name: Extract Version Tag
-      id: get_version
-      run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/tags/})"
-      env:
-        GITHUB_REF: ${{ github.ref }}
-
     - name: Archive Production Artifact
       run: zip -r yanorama-${{ steps.get_version.outputs.tag }}.zip ./build
 
