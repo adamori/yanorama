@@ -29,7 +29,7 @@ jobs:
         GITHUB_REF: ${{ github.ref }}
 
     - name: Archive Production Artifact
-      run: zip -r release-${{ steps.get_version.outputs.tag }}.zip ./build
+      run: zip -r yanorama-${{ steps.get_version.outputs.tag }}.zip ./build
 
     - name: Upload Release Artifact
       uses: actions/upload-release-asset@v1
