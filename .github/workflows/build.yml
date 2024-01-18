@@ -1,0 +1,55 @@
+name: Build and Release Chrome Extension
+
+on:
+  push:
+    branches:
+      - main  # or your default branch
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20.11'  # Specify your Node.js version
+
+    - name: Install Dependencies
+      run: npm install
+
+
+    - name: Extract Version from manifest.json
+      id: extract_version
+      run: echo "::set-output name=VERSION::$(jq -r .version ./path/to/your/manifest.json)"
+      shell: bash
+
+    - name: Archive Build
+      run: zip -r yanorama_v_${{ steps.extract_version.outputs.VERSION }}.zip ./build  # Replace './build' with your build directory
+
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ steps.extract_version.outputs.VERSION }}
+        release_name: Release v${{ steps.extract_version.outputs.VERSION }}
+        draft: false
+        prerelease: false
+        body: "Release of Yanorama v${{ steps.extract_version.outputs.VERSION }}"
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./yanorama_v_${{ steps.extract_version.outputs.VERSION }}.zip
+        asset_name: yanorama_v_${{ steps.extract_version.outputs.VERSION }}.zip
+        asset_content_type: application/zip
