@@ -3,7 +3,7 @@ name: Build and Release Chrome Extension
 on:
   push:
     branches:
-      - main  # or your default branch
+      - main
 
 jobs:
   build-and-release:
@@ -16,7 +16,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '20.11'  # Specify your Node.js version
+        node-version: '20.11'
 
     - name: Install Dependencies
       run: npm install
@@ -24,11 +24,11 @@ jobs:
 
     - name: Extract Version from manifest.json
       id: extract_version
-      run: echo "::set-output name=VERSION::$(jq -r .version ./path/to/your/manifest.json)"
+      run: echo "::set-output name=VERSION::$(jq -r .version ./build/manifest.json)"
       shell: bash
 
     - name: Archive Build
-      run: zip -r yanorama_v_${{ steps.extract_version.outputs.VERSION }}.zip ./build  # Replace './build' with your build directory
+      run: zip -r yanorama_v_${{ steps.extract_version.outputs.VERSION }}.zip ./build
 
 
     - name: Create Release
