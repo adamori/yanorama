@@ -1,19 +1,17 @@
-name: Build and Release Chrome Extension
+name: Build and Release
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [created]
 
 jobs:
-  build-and-release:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-    - name: Set up Node.js
+    - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
         node-version: '20.11'
@@ -21,37 +19,24 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
-    - name: Build Extension
+    - name: Build Chrome Extension
       run: npm run build
 
-    - name: Extract Version from manifest.json
-      id: extract_version
-      run: echo "::set-output name=VERSION::$(jq -r .version ./build/manifest.json)"
-      shell: bash
-
-    - name: Archive Build
-      run: zip -r yanorama_v_${{ steps.extract_version.outputs.VERSION }}.zip ./build
-
-
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
+    - name: Extract Version Tag
+      id: get_version
+      run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/tags/})"
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: v${{ steps.extract_version.outputs.VERSION }}
-        release_name: Release v${{ steps.extract_version.outputs.VERSION }}
-        draft: false
-        prerelease: false
-        body: "Release of Yanorama v${{ steps.extract_version.outputs.VERSION }}"
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        GITHUB_REF: ${{ github.ref }}
 
-    - name: Upload Release Asset
+    - name: Archive Production Artifact
+      run: zip -r release-${{ steps.get_version.outputs.tag }}.zip ./build
+
+    - name: Upload Release Artifact
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./yanorama_v_${{ steps.extract_version.outputs.VERSION }}.zip
-        asset_name: yanorama_v_${{ steps.extract_version.outputs.VERSION }}.zip
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./yanorama-${{ steps.get_version.outputs.tag }}.zip
+        asset_name: yanorama-${{ steps.get_version.outputs.tag }}.zip
         asset_content_type: application/zip
