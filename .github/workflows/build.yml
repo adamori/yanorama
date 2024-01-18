@@ -23,7 +23,7 @@ jobs:
     - name: Archive Production Artifact
       run: |
         cd build
-        zip -r ../yanorama-${{  github.ref_name }}.zip ./build/*
+        zip -r ../yanorama-${{  github.ref_name }}.zip ./
 
 
     - name: Release
