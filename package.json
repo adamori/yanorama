@@ -1,6 +1,6 @@
 {
   "name": "yanorama",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "markarenin",
   "description": "Yandex Panorama Downloader",
   "type": "module",
