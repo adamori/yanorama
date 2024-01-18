@@ -21,6 +21,8 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
+    - name: Build Extension
+      run: npm run build
 
     - name: Extract Version from manifest.json
       id: extract_version
